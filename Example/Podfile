@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'MLWTiledLayout_Example' do
+  pod 'MLWTiledLayout', :path => '../'
+
+  target 'MLWTiledLayout_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
