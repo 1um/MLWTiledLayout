@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0820"
+   LastUpgradeVersion = "0700"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6003F589195388D20070C39A"
-               BuildableName = "MLWTiledLayout_Example.app"
-               BlueprintName = "MLWTiledLayout_Example"
-               ReferencedContainer = "container:MLWTiledLayout.xcodeproj">
+               BlueprintIdentifier = "8BCB8C5E02A9E6E92519B996FB06130C"
+               BuildableName = "MLWTiledLayout.framework"
+               BlueprintName = "MLWTiledLayout"
+               ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -28,26 +28,7 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6003F5AD195388D20070C39A"
-               BuildableName = "MLWTiledLayout_Tests.xctest"
-               BlueprintName = "MLWTiledLayout_Tests"
-               ReferencedContainer = "container:MLWTiledLayout.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6003F589195388D20070C39A"
-            BuildableName = "MLWTiledLayout_Example.app"
-            BlueprintName = "MLWTiledLayout_Example"
-            ReferencedContainer = "container:MLWTiledLayout.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -61,16 +42,15 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6003F589195388D20070C39A"
-            BuildableName = "MLWTiledLayout_Example.app"
-            BlueprintName = "MLWTiledLayout_Example"
-            ReferencedContainer = "container:MLWTiledLayout.xcodeproj">
+            BlueprintIdentifier = "8BCB8C5E02A9E6E92519B996FB06130C"
+            BuildableName = "MLWTiledLayout.framework"
+            BlueprintName = "MLWTiledLayout"
+            ReferencedContainer = "container:Pods.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -80,16 +60,6 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6003F589195388D20070C39A"
-            BuildableName = "MLWTiledLayout_Example.app"
-            BlueprintName = "MLWTiledLayout_Example"
-            ReferencedContainer = "container:MLWTiledLayout.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

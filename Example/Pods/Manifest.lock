@@ -1,0 +1,16 @@
+PODS:
+  - MLWTiledLayout (0.1.0)
+
+DEPENDENCIES:
+  - MLWTiledLayout (from `../`)
+
+EXTERNAL SOURCES:
+  MLWTiledLayout:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  MLWTiledLayout: 9977bf371357b894817d5b042e9e2c04e62234fd
+
+PODFILE CHECKSUM: b7fe9b888ff438716fb977d47d4b28a2e7224b93
+
+COCOAPODS: 1.1.1

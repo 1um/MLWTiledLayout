@@ -1,0 +1,6 @@
+framework module MLWTiledLayout {
+  umbrella header "MLWTiledLayout-umbrella.h"
+
+  export *
+  module * { export * }
+}
