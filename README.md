@@ -7,7 +7,7 @@
 [![Platform](https://img.shields.io/cocoapods/p/MLWTiledLayout.svg?style=flat)](http://cocoapods.org/pods/MLWTiledLayout)
 
 `MLWTiledLayout` is `UICollectionViewLayout` subclass that implements tiled layout or mosaic layout automagically adopted to any iPhone screen size.
-A layout is column-based and inspired by lightbox layout.
+The layout is column-based and inspired by [lightbox layout algorithm](http://blog.vjeux.com/2012/image/image-layout-algorithm-lightbox.html).
 
 <img width="350px" src="images/ScreenShot.png" style="display:block; margin: 10px auto 30px auto; align:center">
 
@@ -28,7 +28,7 @@ it, simply add the following line to your Podfile:
 pod "MLWTiledLayout"
 ```
 
-Or, if you’re using [Carthage](https://github.com/Carthage/Carthage), simply add Bluuur to your `Cartfile`:
+Or, if you’re using [Carthage](https://github.com/Carthage/Carthage), simply add MLWTiledLayout to your `Cartfile`:
 
 ```
 github "ML-Works/MLWTiledLayout"
