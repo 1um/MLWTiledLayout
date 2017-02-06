@@ -50,29 +50,60 @@
             NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:section];
             CGSize size = [self.delegate tiledLayout:self sizeForCellAtIndexPath:indexPath];
 
-            NSCountedSet<NSNumber *> *countedSet = [NSCountedSet setWithArray:columnHeights];
-            NSArray *sortedCountedSet = [countedSet.allObjects sortedArrayUsingSelector:@selector(compare:)];
-            for (NSNumber *height in sortedCountedSet) {
-                NSInteger count = [countedSet countForObject:height];
-                if (count >= size.width) {
-                    NSInteger position = [columnHeights indexOfObject:height];
-                    for (NSInteger i = position; i < position + size.width; i++) {
-                        columnHeights[i] = @(columnHeights[i].integerValue + size.height);
-                    }
-
-                    UICollectionViewLayoutAttributes *attributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
-                    CGRect frame = CGRectMake(position * columnWidth, height.integerValue * columnWidth,
-                                              size.width * columnWidth, size.height * columnWidth);
-                    CGFloat halfSpacing = self.itemSpacing / 2.0;
-                    frame = CGRectInset(frame, halfSpacing, halfSpacing);
-                    frame = CGRectOffset(frame, halfSpacing, halfSpacing);
-                    attributes.frame = frame;
-                    self.cachedAttributes[indexPath] = attributes;
-                    break;
+            NSInteger bestIndex = NSNotFound;
+            NSInteger bestHeight = NSIntegerMax;
+            NSInteger length = 0;
+            NSInteger height = columnHeights.firstObject.integerValue;
+            for (NSInteger index = 0; index < columnsCount; index++) {
+                NSInteger columnHeight = columnHeights[index].integerValue;
+                if (columnHeight == height) {
+                    length++;
+                }
+                else {
+                    length = 1;
+                    height = columnHeight;
+                }
+                
+                if (length == size.width && height < bestHeight) {
+                    bestIndex = index + 1 - length;
+                    bestHeight = height;
                 }
             }
-
-            NSAssert(self.cachedAttributes[indexPath], @"Inconsistency layout, check tiledLayout:sizeForCellAtIndexPath: method");
+            
+            if (bestIndex == NSNotFound) {
+                NSAssert(NO, @"Inconsistency layout, check -tiledLayout:sizeForCellAtIndexPath: method to avoid spaces in layout");
+                
+                NSInteger length = 0;
+                NSInteger height = columnHeights.firstObject.integerValue;
+                for (NSInteger index = 0; index < columnsCount; index++) {
+                    NSInteger columnHeight = columnHeights[index].integerValue;
+                    if (columnHeight <= height) {
+                        length++;
+                    }
+                    else {
+                        length = 0;
+                        height = columnHeight;
+                    }
+                    
+                    if (length >= size.width && height < bestHeight) {
+                        bestIndex = index + 1 - length;
+                        bestHeight = height;
+                    }
+                }
+            }
+            
+            for (NSInteger i = bestIndex; i < bestIndex + size.width; i++) {
+                columnHeights[i] = @(bestHeight + size.height);
+            }
+            
+            UICollectionViewLayoutAttributes *attributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
+            CGRect frame = CGRectMake(bestIndex * columnWidth, bestHeight * columnWidth,
+                                      size.width * columnWidth, size.height * columnWidth);
+            CGFloat halfSpacing = self.itemSpacing / 2.0;
+            frame = CGRectInset(frame, halfSpacing, halfSpacing);
+            frame = CGRectOffset(frame, halfSpacing, halfSpacing);
+            attributes.frame = frame;
+            self.cachedAttributes[indexPath] = attributes;
         }
     }
 
