@@ -1,5 +1,5 @@
 PODS:
-  - MLWTiledLayout (0.1.1)
+  - MLWTiledLayout (0.2.0)
 
 DEPENDENCIES:
   - MLWTiledLayout (from `../`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  MLWTiledLayout: 5cbdf75a1d27bdf13e4c184f673295ab75740a7d
+  MLWTiledLayout: a3dcfa718f382d0ec87d6037dfda65b1dcf37788
 
 PODFILE CHECKSUM: b7fe9b888ff438716fb977d47d4b28a2e7224b93
 
