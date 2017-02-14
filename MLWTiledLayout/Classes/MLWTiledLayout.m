@@ -51,11 +51,11 @@
             CGSize size = [self.delegate tiledLayout:self sizeForCellAtIndexPath:indexPath];
 
             NSInteger bestIndex = NSNotFound;
-            NSInteger bestHeight = NSIntegerMax;
+            CGFloat bestHeight = CGFLOAT_MAX;
             NSInteger length = 0;
-            NSInteger height = columnHeights.firstObject.integerValue;
+            CGFloat height = columnHeights.firstObject.doubleValue;
             for (NSInteger index = 0; index < columnsCount; index++) {
-                NSInteger columnHeight = columnHeights[index].integerValue;
+                CGFloat columnHeight = columnHeights[index].doubleValue;
                 if (columnHeight == height) {
                     length++;
                 }
@@ -74,9 +74,9 @@
                 NSAssert(NO, @"Inconsistency layout, check -tiledLayout:sizeForCellAtIndexPath: method to avoid spaces in layout");
                 
                 NSInteger length = 0;
-                NSInteger height = columnHeights.firstObject.integerValue;
+                CGFloat height = columnHeights.firstObject.doubleValue;
                 for (NSInteger index = 0; index < columnsCount; index++) {
-                    NSInteger columnHeight = columnHeights[index].integerValue;
+                    CGFloat columnHeight = columnHeights[index].doubleValue;
                     if (columnHeight <= height) {
                         length++;
                     }
@@ -105,9 +105,14 @@
             attributes.frame = frame;
             self.cachedAttributes[indexPath] = attributes;
         }
+        
+        CGFloat pointHeight = [[columnHeights valueForKeyPath:@"@max.doubleValue"] doubleValue];
+        for (NSUInteger i = 0; i < columnHeights.count; i++) {
+            columnHeights[i] = @(pointHeight);
+        }
     }
-
-    self.contentMaxHeight = [[columnHeights valueForKeyPath:@"@max.integerValue"] integerValue] * columnWidth;
+    
+    self.contentMaxHeight = columnHeights.firstObject.doubleValue * columnWidth;
 }
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
