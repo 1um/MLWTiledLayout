@@ -49,10 +49,12 @@ static NSString *const kFooterId = @"footer";
     [collectionView registerClass:[UICollectionViewCell class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:kFooterId];
     [self.view addSubview:collectionView];
 
-    [collectionView.topAnchor constraintEqualToAnchor:self.topLayoutGuide.bottomAnchor].active = YES;
-    [collectionView.bottomAnchor constraintEqualToAnchor:self.bottomLayoutGuide.topAnchor].active = YES;
-    [collectionView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor].active = YES;
-    [collectionView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor].active = YES;
+    if ([collectionView respondsToSelector:@selector(topAnchor)]) {
+        [collectionView.topAnchor constraintEqualToAnchor:self.topLayoutGuide.bottomAnchor].active = YES;
+        [collectionView.bottomAnchor constraintEqualToAnchor:self.bottomLayoutGuide.topAnchor].active = YES;
+        [collectionView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor].active = YES;
+        [collectionView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor].active = YES;
+    }
 }
 
 
