@@ -52,6 +52,13 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (CGSize)tiledLayout:(MLWTiledLayout *)layout sizeForCellAtIndexPath:(NSIndexPath *)indexPath;
 
+@optional
+/**
+ Section Header and Footer support
+ */
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section;
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section;
+
 @end
 
 NS_ASSUME_NONNULL_END

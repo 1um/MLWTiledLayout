@@ -23,6 +23,8 @@
 #import "MLWViewController.h"
 
 static NSString *const kCellId = @"cell";
+static NSString *const kHeaderId = @"header";
+static NSString *const kFooterId = @"footer";
 
 @interface MLWViewController () <UICollectionViewDataSource, MLWTiledLayoutDelegate>
 
@@ -43,6 +45,8 @@ static NSString *const kCellId = @"cell";
     collectionView.dataSource = self;
     collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -2.0);
     [collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:kCellId];
+    [collectionView registerClass:[UICollectionViewCell class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kHeaderId];
+    [collectionView registerClass:[UICollectionViewCell class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:kFooterId];
     [self.view addSubview:collectionView];
 
     [collectionView.topAnchor constraintEqualToAnchor:self.topLayoutGuide.bottomAnchor].active = YES;
@@ -54,8 +58,12 @@ static NSString *const kCellId = @"cell";
 
 #pragma mark - UICollectionViewDataSource
 
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    return 2;
+}
+
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 40;
+    return section == 0 ? 5 : 40;
 }
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -72,6 +80,30 @@ static NSString *const kCellId = @"cell";
     cell.layer.shouldRasterize = YES;
 
     return cell;
+}
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    UICollectionViewCell *cell;
+    
+    if(kind == UICollectionElementKindSectionHeader) {
+        cell = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:kHeaderId forIndexPath:indexPath];
+        UILabel *label =  [[UILabel alloc] initWithFrame: CGRectInset(cell.contentView.frame, 20.0f, 10.0f)];
+        label.text = [NSString stringWithFormat:@"Section #%ld", (long)indexPath.section+1];
+        label.font = [UIFont boldSystemFontOfSize: 20.0f];
+        [cell.contentView addSubview:label];
+    } else {
+        cell = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:kFooterId forIndexPath:indexPath];
+    }
+    
+    return cell;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
+    return CGSizeMake(collectionView.contentSize.width, 50);
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
+    return CGSizeMake(collectionView.contentSize.width, 20);
 }
 
 #pragma mark - MLWTiledLayoutDelegate

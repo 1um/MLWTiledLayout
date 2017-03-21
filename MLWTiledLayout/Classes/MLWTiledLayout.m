@@ -23,7 +23,11 @@
 @interface MLWTiledLayout ()
 
 @property (strong, nonatomic) NSMutableDictionary<NSIndexPath *, UICollectionViewLayoutAttributes *> *cachedAttributes;
+@property (strong, nonatomic) NSMutableDictionary<NSIndexPath *, UICollectionViewLayoutAttributes *> *cachedSupplementaryViewsAttributes;
 @property (assign, nonatomic) NSInteger contentMaxHeight;
+
+@property (assign, nonatomic) CGRect previousRect;
+@property (strong, nonatomic) NSArray<UICollectionViewLayoutAttributes*>* previousAttributes;
 
 @end
 
@@ -35,6 +39,10 @@
     NSParameterAssert(self.delegate);
 
     self.cachedAttributes = [NSMutableDictionary dictionary];
+    self.cachedSupplementaryViewsAttributes = [NSMutableDictionary dictionary];
+    self.contentMaxHeight = 0;
+    self.previousRect = CGRectZero;
+    self.previousAttributes = @[];
 
     NSInteger columnsCount = [self.delegate numberOfColumnsInTiledLayout:self];
     CGFloat columnWidth = (CGRectGetWidth(self.collectionView.bounds) - self.itemSpacing) / columnsCount;
@@ -43,8 +51,17 @@
         [columnHeights addObject:@0];
     }
 
+    NSInteger headerOffset = 0, footerOffset = 0;
     NSInteger sectionCount = self.collectionView.numberOfSections;
     for (NSInteger section = 0; section < sectionCount; section++) {
+        
+        if([self headerHeightForSection:section]) {
+            [self cacheAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                                                atIndexPath:[NSIndexPath indexPathForRow:0 inSection:section]
+                                                 withOffest:columnHeights.firstObject.doubleValue * columnWidth + headerOffset + footerOffset];
+            headerOffset+=[self headerHeightForSection:section];
+        }
+
         NSInteger itemsCount = [self.collectionView numberOfItemsInSection:section];
         for (NSInteger item = 0; item < itemsCount; item++) {
             NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:section];
@@ -97,7 +114,7 @@
             }
             
             UICollectionViewLayoutAttributes *attributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
-            CGRect frame = CGRectMake(bestIndex * columnWidth, bestHeight * columnWidth,
+            CGRect frame = CGRectMake(bestIndex * columnWidth, bestHeight * columnWidth  + headerOffset + footerOffset,
                                       size.width * columnWidth, size.height * columnWidth);
             CGFloat halfSpacing = self.itemSpacing / 2.0;
             frame = CGRectInset(frame, halfSpacing, halfSpacing);
@@ -110,16 +127,30 @@
         for (NSUInteger i = 0; i < columnHeights.count; i++) {
             columnHeights[i] = @(pointHeight);
         }
+        
+        if([self footerHeightForSection:section]) {
+            [self cacheAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionFooter
+                                                atIndexPath:[NSIndexPath indexPathForRow:itemsCount-1 inSection:section]
+                                                 withOffest:columnHeights.firstObject.doubleValue * columnWidth + headerOffset + footerOffset];
+            footerOffset+=[self footerHeightForSection:section];
+        }
     }
     
-    self.contentMaxHeight = columnHeights.firstObject.doubleValue * columnWidth;
+    self.contentMaxHeight = columnHeights.firstObject.doubleValue * columnWidth + headerOffset + footerOffset;
 }
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
+    if(CGRectEqualToRect(rect, self.previousRect)) return self.previousAttributes;
+    
     NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(UICollectionViewLayoutAttributes *_Nullable evaluatedObject, NSDictionary<NSString *, id> *_Nullable bindings) {
         return CGRectIntersectsRect(evaluatedObject.frame, rect);
     }];
-    return [self.cachedAttributes.allValues filteredArrayUsingPredicate:predicate];
+
+    self.previousAttributes = [[self.cachedAttributes.allValues filteredArrayUsingPredicate:predicate] arrayByAddingObjectsFromArray:
+            [self.cachedSupplementaryViewsAttributes.allValues filteredArrayUsingPredicate:predicate]];
+    self.previousRect = rect;
+    
+    return self.previousAttributes;
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -129,6 +160,30 @@
 - (CGSize)collectionViewContentSize {
     return CGSizeMake(CGRectGetWidth(self.collectionView.bounds),
                       self.contentMaxHeight + self.itemSpacing);
+}
+
+- (CGFloat)headerHeightForSection:(NSUInteger)section {
+    CGSize size = CGSizeZero;
+    if ([self.delegate respondsToSelector:@selector(collectionView:layout:referenceSizeForHeaderInSection:)]) {
+        size = [self.delegate collectionView:self.collectionView layout:self referenceSizeForHeaderInSection:section];
+    }
+    return size.height;
+}
+
+- (CGFloat)footerHeightForSection:(NSUInteger)section {
+    CGSize size = CGSizeZero;
+    if ([self.delegate respondsToSelector:@selector(collectionView:layout:referenceSizeForFooterInSection:)]) {
+        size = [self.delegate collectionView:self.collectionView layout:self referenceSizeForFooterInSection:section];
+    }
+    return size.height;
+}
+
+- (void)cacheAttributesForSupplementaryViewOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath withOffest:(CGFloat)offestY {
+    UICollectionViewLayoutAttributes* attributes = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:kind withIndexPath:indexPath];
+    CGFloat height = [kind isEqualToString:UICollectionElementKindSectionHeader] ? [self headerHeightForSection:indexPath.section] : [self footerHeightForSection:indexPath.section];
+    CGRect frame = CGRectMake(0, offestY, CGRectGetWidth(self.collectionView.bounds), height);
+    attributes.frame = frame;
+    self.cachedSupplementaryViewsAttributes[indexPath] = attributes;
 }
 
 @end
