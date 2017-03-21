@@ -1,6 +1,6 @@
 # MLWTiledLayout
 
-[![CI Status](http://img.shields.io/travis/Andrew Podkovyrin/MLWTiledLayout.svg?style=flat)](https://travis-ci.org/Andrew Podkovyrin/MLWTiledLayout)
+[![CI Status](http://img.shields.io/travis/Andrew%20Podkovyrin/MLWTiledLayout.svg?style=flat)](https://travis-ci.org/Andrew%20Podkovyrin/MLWTiledLayout)
 [![Version](https://img.shields.io/cocoapods/v/MLWTiledLayout.svg?style=flat)](http://cocoapods.org/pods/MLWTiledLayout)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![License](https://img.shields.io/cocoapods/l/MLWTiledLayout.svg?style=flat)](http://cocoapods.org/pods/MLWTiledLayout)
@@ -9,7 +9,7 @@
 `MLWTiledLayout` is `UICollectionViewLayout` subclass that implements tiled layout or mosaic layout automagically adopted to any iPhone screen size.
 The layout is column-based and inspired by [lightbox layout algorithm](http://blog.vjeux.com/2012/image/image-layout-algorithm-lightbox.html).
 
-<img width="350px" src="images/ScreenShot.png" style="display:block; margin: 10px auto 30px auto; align:center">
+<img width="710px" src="images/ScreenShots.png" style="display:block; margin: 10px auto 30px auto; align:center">
 
 ## Example
 
